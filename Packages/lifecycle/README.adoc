@@ -1,0 +1,119 @@
+## Types
+
+* library packages - designed to be consumed by another packages
+** the name *MUST* match directory name
+
+* main packages 
+
+** application entrypoint
+** contains main() function
+** can be in any directory name
+** focused on app setup and initialization
+
+## Naming
+
+* nouns
+* explicit
+* no underscores
+* carefull with abbreviations
+
+## Lifecycle
+
+1. packages are imported
+2. variables are initialiazed
+3. init function is called to dynamically reinit the variables
+
+### init() function
+
+
+
+
+## Visibility
+
+Scopes: 
+
+* public scope 
+** Capitalize 
+** Available for any member of package or consumer of package
+
+* package-level scope
+** start with lower-case letter
+** available only for package members
+
+* internal package (not the same as private)
+** parent package and its descendent can access it
+** cannot be accessed outside trees
+
+## Documention
+
+* Document package
+* Document its members
+** document public API
+
+## Designing best practices
+
+* package should be focused on a specific solution 
+** do a single thing
+** consistent API
+
+* package should focus on the consumer
+** simple to use
+** minimize API
+** encapsulate changes / i.e. return an interface if your objects will evolve over time
+
+* maximize reusability
+** reduce dependencies
+** minimize scope
+
+## Design interfaces
+
+* receive concrete types when we need to receive configuration
+* receive interface when we need to receive behaviours
+
+* return concrete types is preferrable for both config and behaviour
+* return errors and avoid panics
+
+Concrete types receive:
+* net/http.Request
+Interface types receive:
+* net/http.Handler
+Concrete types retuns:
+* net/http.Response
+Error returs:
+* net/http.Get
+
+## Importing packages
+
+* standard
+* alias
+
+----
+lmjson "pluralsight.com/libmanager/json"
+----
+
+* for side effect. when you only want to init the package but not used it, i.e. running the init functions. Commonly used when importing database drivers.
+
+----
+_ "github.com/lib/pq"
+----
+
+Example:
+
+----
+import (
+    "database/sql"
+    _ "github.com/lib/pq"
+)
+----
+
+SQL will manage interaction to database, but it needs the driver. 
+
+* internal packages. Must reside in `internal` directory - will be accessible only by parents
+
+* relative imports - like navigating to directories. They are not valid in modules or workspaces, only for prototyping
+
+* vendored dirctory. Create a structury of directories in your own package under vendor directory.
+
+----
+mkdir -p vendor/github.com/google/uuid
+----

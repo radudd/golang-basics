@@ -1,0 +1,60 @@
+# Handlers
+
+## Listen and serve
+
+The `ListenAndServe` method takes 2 arguments:
+* port where app listens
+* handler. by default this is `DefaultServerMux`
+
+DefaultServerMux has the handler specified whether by: 
+* Handle
+* HandlerFunc
+
+If not using defaultServerMux, you need to specify a handler.
+
+## Handler types
+
+* Handle - takes as arguments 
+
+** path
+** a custom type that must implement Handler interface. The interface is implemented if ServeHTTP is overriden. 
+
+This provides a lot of flexibility as the custom type can be a struct with many values that can be parametrised
+
+----
+http.Handle("/", myHandler)
+----
+
+* HandleFunc - Takes as arguments:
+
+** path
+** handler func, i.e. a function that must have the responseWriter and Request as arguments. 
+
+The level of flexibility is not as in handler as we cannot parametrise it.
+
+
+----
+http.HandleFunc("/", func)
+----
+
+* Custom handlers - return a Handler type. Can be used with Handle.
+** NotFoundHandler - returns a 404 to the requester, i.e. if a user doesn-t have access rights to a specific path
+** Redirect - takes the request and redirected to another url.
+** StripPrefix - decorator
+** TimeoutHandler - decorator
+** FileServer 
+
+# Templates
+
+* they are fed by structs
+
+Functions:
+* New - create template
+* Parse - parse a template
+* Execute - generate the respone and provide to Handler
+
+If we load from files:
+* ParseFiles - parse a list of template files = crate template files with names of files
+* ParseGlob - parse a glob match files - create template files with names of files
+* Lookup - 
+* Must - takes parsed files as argument and panic if they can't be loaded 
